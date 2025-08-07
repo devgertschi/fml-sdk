@@ -1,6 +1,6 @@
 {
   "name": "@devgertschi/fml-sdk",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Freeform Markup Language (FML) SDK for structured AI prompting using XML-style tags and variables.",
   "main": "dist/index.js",
   "scripts": {

@@ -4,7 +4,7 @@
   "description": "Freeform Markup Language (FML) SDK for structured AI prompting using XML-style tags and variables.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "dev": "tsc --watch",
     "link" : "npm run build && npm link",

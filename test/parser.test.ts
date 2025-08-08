@@ -1,4 +1,4 @@
-import { parseFML } from '../src/parser';
+import { parseFML } from '../src';
 
 describe('parseFML', () => {
 	it('parses a simple FML file and interpolates variables', async () => {
@@ -108,5 +108,15 @@ a`;
 		await expect(parseFML('./cases/malformed.fml')).rejects.toThrow(
 			/FML syntax error in .*malformed.fml: Malformed XML/
 		);
+	});
+
+	it('parses an FML file with BBCode-style include tags', async () => {
+		const message = await parseFML('./cases/bbcode-include.fml', undefined, { tagStyle: 'bbcode' });
+		const expectedMessage = `This file contains three BBCode-style includes:
+This file has no tags at all.
+This file has no tags at all.
+This file has no tags at all.
+End of BBCode include test.`;
+		expect(message).toEqual(expectedMessage);
 	});
 });

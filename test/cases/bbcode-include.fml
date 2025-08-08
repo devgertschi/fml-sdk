@@ -1,0 +1,5 @@
+This file contains three BBCode-style includes:
+[include src="no-tags.fml"]
+[include src="no-tags.fml"/]
+[include src="no-tags.fml" /]
+End of BBCode include test.

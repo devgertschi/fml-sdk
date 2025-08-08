@@ -13,6 +13,10 @@ interface FMLParseOptions {
 	 * relative to their parent FML file.
 	 */
 	baseDir?: string;
+	/**
+	 * The tag style to use for parsing include tags: 'xml' (default, e.g. <include .../>) or 'bbcode' (e.g. [include ...]).
+	 */
+	tagStyle?: 'xml' | 'bbcode';
 }
 
 /**
@@ -67,8 +71,14 @@ export async function parseFML(
 	// Process <include src="..."/> tags
 	// Regex to find <include src="path/to/file.fml"/> (self-closing)
 	// or <include src="path/to/file.fml">...</include> (with closing tag).
+	// Determine tag style (default to 'xml')
+	const tagStyle = options?.tagStyle || 'xml';
+
+	// Select regex for include tags based on tag style
 	const includeRegex =
-		/<include\s+src="([^"]+?)"\s*(?:\s*\/>|>[\s\S]*?<\/include\s*>)/;
+		tagStyle === 'bbcode'
+			? /\[include\s+src="([^"]+?)"\s*(?:]|\/]|\s*\/])/
+			: /<include\s+src="([^"]+?)"\s*(?:\s*\/>|>[\s\S]*?<\/include\s*>)/;
 	let match;
 
 	// Loop to find and replace include tags one by one.
@@ -91,17 +101,19 @@ export async function parseFML(
 		currentContent = currentContent.replace(includeTag, includedContent);
 	}
 
-	// After processing includes, validate the XML structure before variable substitution.
-	try {
-		// Wrap content in a root tag to ensure it's a valid XML document for parsing.
-		// This handles files with multiple top-level elements or no elements at all.
-		const wrappedContent = `<fml-root>${currentContent}</fml-root>`;
-		await parseStringPromise(wrappedContent);
-	} catch (error: any) {
-		// Re-throw a more specific and user-friendly error if parsing fails.
-		throw new Error(
-			`FML syntax error in ${absoluteFilePath}: Malformed XML. Please check for unclosed or mismatched tags.\nParser error: ${error.message}`
-		);
+	if (tagStyle === 'xml') {
+		// After processing includes, validate the XML structure before variable substitution.
+		try {
+			// Wrap content in a root tag to ensure it's a valid XML document for parsing.
+			// This handles files with multiple top-level elements or no elements at all.
+			const wrappedContent = `<fml-root>${currentContent}</fml-root>`;
+			await parseStringPromise(wrappedContent);
+		} catch (error: any) {
+			// Re-throw a more specific and user-friendly error if parsing fails.
+			throw new Error(
+				`FML syntax error in ${absoluteFilePath}: Malformed XML. Please check for unclosed or mismatched tags.\nParser error: ${error.message}`
+			);
+		}
 	}
 
 	// After all includes are processed, substitute variables in the assembled content.

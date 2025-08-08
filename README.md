@@ -12,7 +12,7 @@ Freeform Markup Language (FML) is a lightweight, expressive markup language desi
 ## 📦 Installation
 
 ```bash
-npm install fml-sdk
+npm install @devgertschi/fml-sdk
 ```
 
 ## Syntax
@@ -53,6 +53,23 @@ Modularize prompts using `<include>`:
 Hello there!
 ```
 
+### BBCode Tag Style
+
+You can configure the parser to use BBCode-style tags (e.g., [include src="..." ]) instead of XML-style tags by passing the `tagStyle` option:
+
+```ts
+import { parseFML } from '@devgertschi/fml-sdk';
+
+const message = await parseFML('bbcode-include.fml', undefined, { tagStyle: 'bbcode' });
+```
+
+Example BBCode-style FML:
+
+```
+[include src="common/system-prompt.fml"]
+Hello there!
+```
+
 ## Example
 
 ```ts
@@ -68,8 +85,8 @@ const message = await parseFML('onboarding-prompt.fml', {
 - Extension: `.fml`
 - UTF-8 encoding
 
+---
 
 Built with ❤️ by [David Pichsenmeister](https://pichsenmeister.com) to make prompting a bit more human.
 
-
-
+Heard about in a talk @viennajs, tried, forked and probably improved by [devgertschi](https://gertschi.dev).

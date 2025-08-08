@@ -1,13 +1,14 @@
 {
   "name": "@devgertschi/fml-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Freeform Markup Language (FML) SDK for structured AI prompting using XML-style tags and variables.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "dev": "tsc --watch",
-    "link" : "npm run build && npm link",
+    "link": "npm run build && npm link",
     "superclean": "npm run clean && rm -rf node_modules && rm -rf package-lock.json && npm cache clean --force",
     "test": "vitest"
   },
@@ -27,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/devgertschi/fml-sdk"
+    "url": "git+https://github.com/devgertschi/fml-sdk.git"
   },
   "files": [
     "dist",
